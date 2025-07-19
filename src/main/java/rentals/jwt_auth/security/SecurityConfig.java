@@ -32,9 +32,9 @@ public class SecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // autorise /auth/login et /auth/register
+                .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/api/user/me").authenticated()
-                .anyRequest().authenticated()            // toutes les autres requêtes nécessitent un token
+                .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
@@ -53,7 +53,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // crypte les mots de passe
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
