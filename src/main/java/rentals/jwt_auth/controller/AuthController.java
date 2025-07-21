@@ -1,5 +1,6 @@
 package rentals.jwt_auth.controller;
 
+import rentals.jwt_auth.dto.LoginRequest;
 import rentals.jwt_auth.dto.RegisterRequest;
 import rentals.jwt_auth.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         String token = authService.register(request);
+        return ResponseEntity.ok(token);
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        String token = authService.login(request);
         return ResponseEntity.ok(token);
     }
 }

@@ -4,6 +4,10 @@ import rentals.jwt_auth.dto.RegisterRequest;
 import rentals.jwt_auth.model.User;
 import rentals.jwt_auth.repository.UserRepository;
 import rentals.jwt_auth.security.JwtUtil;
+import rentals.jwt_auth.dto.LoginRequest;
+
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +35,16 @@ public class AuthService {
 
         return jwtUtil.generateToken(user);
     }
+    
+    public String login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé : " + request.getEmail()));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Mot de passe invalide");
+        }
+
+        return jwtUtil.generateToken(user);
+    }
+
 }
