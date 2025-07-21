@@ -3,6 +3,8 @@ package rentals.jwt_auth.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import rentals.jwt_auth.model.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +19,9 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 60 * 60 * 1000; // 1h
 
     // Générer un JWT pour un utilisateur
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
