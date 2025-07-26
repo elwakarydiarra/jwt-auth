@@ -1,5 +1,7 @@
 package rentals.jwt_auth.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,4 +36,15 @@ public class MessageController {
 
         return ResponseEntity.ok(message);
     }
+    
+    @GetMapping
+    public ResponseEntity<List<Message>> getUserMessages(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                      .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+        List<Message> messages = messageService.getMessagesByUserId(user.getId());
+        return ResponseEntity.ok(messages);
+    }
+
+
+
 }

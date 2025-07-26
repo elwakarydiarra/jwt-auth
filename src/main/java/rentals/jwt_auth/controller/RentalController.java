@@ -19,6 +19,12 @@ public class RentalController {
     public RentalController(RentalRepository rentalRepository) {
         this.rentalRepository = rentalRepository;
     }
+    
+    @PostMapping
+    public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
+        Rental savedRental = rentalRepository.save(rental);
+        return ResponseEntity.ok(savedRental);
+    }
 
     @GetMapping
     public ResponseEntity<List<Rental>> getAllRentals(@AuthenticationPrincipal UserDetails userDetails) {
