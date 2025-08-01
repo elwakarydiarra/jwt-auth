@@ -1,12 +1,9 @@
 package rentals.jwt_auth.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import rentals.jwt_auth.model.Rental;
-import rentals.jwt_auth.repository.RentalRepository;
+import rentals.jwt_auth.service.RentalService;
 
 import java.util.List;
 
@@ -14,24 +11,19 @@ import java.util.List;
 @RequestMapping("/api/rentals")
 public class RentalController {
 
-    private final RentalRepository rentalRepository;
+    private final RentalService rentalService;
 
-    public RentalController(RentalRepository rentalRepository) {
-        this.rentalRepository = rentalRepository;
-    }
-    
-    @PostMapping
-    public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
-        Rental savedRental = rentalRepository.save(rental);
-        return ResponseEntity.ok(savedRental);
+    public RentalController(RentalService rentalService) {
+        this.rentalService = rentalService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Rental>> getAllRentals(@AuthenticationPrincipal UserDetails userDetails) {
-        // Juste pour confirmer que l'utilisateur est authentifié (facultatif)
-        System.out.println("👤 Utilisateur authentifié : " + userDetails.getUsername());
+    public ResponseEntity<List<Rental>> getAllRentals() {
+        return ResponseEntity.ok(rentalService.getAllRentals());
+    }
 
-        List<Rental> rentals = rentalRepository.findAll();
-        return ResponseEntity.ok(rentals);
+    @PostMapping
+    public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
+        return ResponseEntity.ok(rentalService.createRental(rental));
     }
 }

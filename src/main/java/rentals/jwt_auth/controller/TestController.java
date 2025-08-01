@@ -10,6 +10,6 @@ public class TestController {
 
     @GetMapping("/test")
     public String securedEndpoint() {
-        return "✅ Accès autorisé avec un token valide.";
+        return "Accès autorisé avec un token valide.";
     }
 }
