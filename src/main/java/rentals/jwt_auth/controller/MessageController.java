@@ -12,6 +12,8 @@ import rentals.jwt_auth.model.Message;
 import rentals.jwt_auth.model.User;
 import rentals.jwt_auth.repository.UserRepository;
 import rentals.jwt_auth.service.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -25,6 +27,9 @@ public class MessageController {
         this.userRepository = userRepository;
     }
 
+    @Operation(summary = "Envoyer un message pour une location", responses = {
+            @ApiResponse(responseCode = "200", description = "Message enregistré")
+        })
     @PostMapping
     public ResponseEntity<Message> sendMessage(@RequestBody MessageRequest request,
                                                @AuthenticationPrincipal UserDetails userDetails) {
@@ -37,6 +42,9 @@ public class MessageController {
         return ResponseEntity.ok(message);
     }
     
+    @Operation(summary = "Lister les messages de l'utilisateur connecté", responses = {
+            @ApiResponse(responseCode = "200", description = "Liste des messages")
+        })
     @GetMapping
     public ResponseEntity<List<Message>> getUserMessages(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername())
