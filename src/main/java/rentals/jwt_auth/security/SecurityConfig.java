@@ -32,7 +32,8 @@ public class SecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-            		.requestMatchers("/api/auth/**").permitAll()
+            		.requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+            		.requestMatchers("/uploads/**").permitAll()
             		.requestMatchers(
                             "/swagger-ui.html",
                             "/swagger-ui/**",
@@ -41,7 +42,7 @@ public class SecurityConfig {
                             "/swagger-resources/**",
                             "/webjars/**"
                         ).permitAll()
-                .requestMatchers("/api/user/me").authenticated()
+                .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/api/messages/**").authenticated()
                 .requestMatchers("/api/rentals/**").authenticated()
                 .anyRequest().authenticated()

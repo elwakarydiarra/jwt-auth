@@ -16,9 +16,9 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private static final String SECRET_KEY = "sbUzGmPZhvqDj0VclyLoDnUGNE4N0hWrBGspTw0GNYE=";
-    private static final long EXPIRATION_TIME = 60 * 60 * 1000; // 1h
+    private static final long EXPIRATION_TIME = 60 * 60 * 1000 * 24;
 
-    // Générer un JWT pour un utilisateur
+    
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
