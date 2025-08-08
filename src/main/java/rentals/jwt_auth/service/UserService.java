@@ -26,5 +26,19 @@ public class UserService {
                 return dto;
             });
     }
+    
+    public Optional<UserRequest> getUserRequestById(Long id) {
+        return userRepository.findById(id).map(user -> {
+            UserRequest dto = new UserRequest();
+            dto.setName(user.getName());
+            dto.setEmail(user.getEmail());
+            dto.setRole(user.getRole());
+            dto.setCreated_at(user.getCreated_at());
+            dto.setUpdated_at(user.getUpdated_at());
+            return dto;
+        });
+    }
+
+    
 
 }

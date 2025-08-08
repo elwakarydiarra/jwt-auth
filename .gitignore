@@ -1,3 +1,11 @@
+# Fichiers système macOS
+.DS_Store
+
+# Ignorer tous les fichiers cachés sauf ceux nécessaires
+.*
+!.gitignore
+!.gitattributes
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar

@@ -28,27 +28,23 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Extraire le nom d'utilisateur du token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Vérifier la validité du token
     public boolean isTokenValid(String token, UserDetails userDetails) {
         return userDetails.getUsername().equals(extractUsername(token)) && !isExpired(token);
     }
 
-    // Méthode générique pour extraire une information du token
+  
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         return resolver.apply(getAllClaims(token));
     }
 
-    // Vérifie si le token est expiré
     private boolean isExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-    // Parser les claims du token
     private Claims getAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -57,7 +53,6 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // Retourne la clé de signature
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     }

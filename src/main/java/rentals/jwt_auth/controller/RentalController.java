@@ -2,11 +2,16 @@ package rentals.jwt_auth.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import rentals.jwt_auth.model.Rental;
+import rentals.jwt_auth.model.User;
+import rentals.jwt_auth.repository.UserRepository;
 import rentals.jwt_auth.service.RentalService;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -18,9 +23,11 @@ import java.util.List;
 public class RentalController {
 
     private final RentalService rentalService;
+    private final UserRepository userRepository;
 
-    public RentalController(RentalService rentalService) {
+    public RentalController(RentalService rentalService, UserRepository userRepository) {
         this.rentalService = rentalService;
+        this.userRepository = userRepository;
     }
 
     private String baseUrl(HttpServletRequest request) {
@@ -81,6 +88,7 @@ public class RentalController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Rental> createRental(
+    		@AuthenticationPrincipal UserDetails userDetails,
             @RequestParam("name") String name,
             @RequestParam("surface") Double surface,
             @RequestParam("price") Double price,
@@ -88,11 +96,15 @@ public class RentalController {
             @RequestParam(value = "picture", required = false) MultipartFile picture,
             HttpServletRequest request
     ) {
+    	User owner = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+    	
         Rental rental = new Rental();
         rental.setName(name);
         rental.setSurface(surface);
         rental.setPrice(price);
         rental.setDescription(description);
+        rental.setOwner(owner);
 
         try {
             if (picture != null && !picture.isEmpty()) {

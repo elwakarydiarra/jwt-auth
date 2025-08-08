@@ -5,29 +5,40 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import lombok.RequiredArgsConstructor;
 import rentals.jwt_auth.dto.UserRequest;
+import rentals.jwt_auth.dto.UserResponse;
+import rentals.jwt_auth.repository.UserRepository;
 import rentals.jwt_auth.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
+    
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal UserDetails userDetails) {
+        var u = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+        var dto = new UserResponse(
+                u.getId(),
+                u.getName(),
+                u.getEmail(),
+                u.getRole(),
+                u.getCreated_at(),
+                u.getUpdated_at()
+        );
+        return ResponseEntity.ok(dto);
     }
 
-    @Operation(summary = "Récupérer l'utilisateur connecté", responses = {
-            @ApiResponse(responseCode = "200", description = "Informations de l'utilisateur connecté")
-        })
-    @GetMapping("/me")
-    public ResponseEntity<UserRequest> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return userService.getUserRequestByEmail(userDetails.getUsername())
+    @GetMapping("/{id}")
+    public ResponseEntity<UserRequest> getById(@PathVariable Long id) {
+        return userService.getUserRequestById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
 }
