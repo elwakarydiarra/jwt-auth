@@ -11,18 +11,24 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private Long userId;
-    private Long rentalId;
-    private String message;
-    private LocalDateTime createdAt;
+  @Column(name = "user_id", nullable = false)
+  private Long userId;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+  @Column(name = "rental_id", nullable = false)
+  private Long rentalId;
 
+  @Column(nullable = false, length = 1000)
+  private String message;
+
+  @Column(name = "created_at", updatable = false)
+  private LocalDateTime createdAt;
+
+  @PrePersist
+  protected void onCreate() {
+    this.createdAt = LocalDateTime.now();
+  }
 }
+

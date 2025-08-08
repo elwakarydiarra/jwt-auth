@@ -6,4 +6,5 @@ import rentals.jwt_auth.model.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByUserId(Long userId);
+    List<Message> findByRentalId(Long rentalId);
 }
