@@ -1,6 +1,8 @@
 
 # JWT-Auth Rental API
 
+Une application Spring Boot + Angular permettant de gérer des locations immobilières avec authentification JWT.  
+
 Une API REST sécurisée avec Spring Boot, JWT, Spring Security et JPA, permettant la gestion :
 
 - des utilisateurs (authentification avec JWT),

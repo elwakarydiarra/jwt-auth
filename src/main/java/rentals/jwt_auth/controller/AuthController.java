@@ -42,6 +42,11 @@ public class AuthController {
         String token = authService.login(request);
         return ResponseEntity.ok(Map.of("token", token));
     }
+    
+    @Operation(summary = "Récupérer l’email de l’utilisateur connecté", responses = {
+            @ApiResponse(responseCode = "200", description = "Informations renvoyées"),
+            @ApiResponse(responseCode = "401", description = "Jeton manquant ou invalide")
+        })
     @GetMapping("/me")
     public ResponseEntity<Map<String, String>> me(@AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails userDetails) {
         return ResponseEntity.ok(Map.of("email", userDetails.getUsername()));
