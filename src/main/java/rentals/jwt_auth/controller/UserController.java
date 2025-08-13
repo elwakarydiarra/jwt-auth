@@ -59,5 +59,14 @@ public class UserController {
         return userService.getUserRequestById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
+        }
+    
+@DeleteMapping
+@Operation(summary = "Supprimer tous les utilisateurs (danger)")
+@ApiResponse(responseCode = "204", description = "Supprimés")
+public ResponseEntity<Void> deleteAllUsers(@AuthenticationPrincipal UserDetails principal) {
+    userService.deleteAllUsers();
+    return ResponseEntity.noContent().build();
+}
+
 }

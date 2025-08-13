@@ -1,24 +1,19 @@
 package rentals.jwt_auth.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Schema(description = "Requête pour envoyer un message concernant une location")
+@Schema(description = "Requête de création/mise à jour d'un message")
 public class MessageRequest {
 
-    @Schema(
-        description = "Identifiant unique de la location associée au message",
-        example = "42"
-    )
+    @Schema(description = "Identifiant de la location associée", example = "42")
     private Long rentalId;
 
-    @Schema(
-        description = "Contenu du message envoyé par l'utilisateur",
-        example = "Bonjour, je suis intéressé par votre appartement. Est-il toujours disponible ?"
-    )
+    @Schema(description = "Contenu du message", example = "Bonjour, est-il disponible ?")
     private String message;
+
+    public Long getRentalId() { return rentalId; }
+    public void setRentalId(Long rentalId) { this.rentalId = rentalId; }
+
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 }
